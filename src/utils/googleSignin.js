@@ -10,8 +10,7 @@ import { Alert, ToastAndroid } from "react-native";
 import { addUserToDb } from "./firebaseUserHandlers";
 
 GoogleSignin.configure({
-  webClientId:
-    "197827908579-qp2ftndocn2e065vthf0nmo2nmvm3mc2.apps.googleusercontent.com",
+  webClientId: process.env.WEBCLIENTID,
   offlineAccess: false,
   forceCodeForRefreshToken: false,
 });
@@ -58,7 +57,7 @@ const handleExistingUser = (userName) => {
   ToastAndroid.show(`Welcome Back ${userName}`, ToastAndroid.SHORT);
 };
 
-export const signInGoogle = async (deleteAccount = false) => {
+export const signInGoogle = async () => {
   try {
     await GoogleSignin.hasPlayServices();
     const response = await GoogleSignin.signIn();
@@ -73,9 +72,6 @@ export const signInGoogle = async (deleteAccount = false) => {
     const googleCredential = GoogleAuthProvider.credential(idToken);
     const userCredential = await signInWithCredential(auth, googleCredential);
 
-    if (deleteAccount) {
-      return googleCredential;
-    }
     if (userCredential.additionalUserInfo?.isNewUser) {
       await handleNewUser(userCredential.user);
     } else {
@@ -98,6 +94,6 @@ export const getGoogleCredentialForReauth = async () => {
     const idToken = response.data.idToken;
     return GoogleAuthProvider.credential(idToken);
   } catch (error) {
-    throw error;
+    showErrorAlert(error);
   }
 };
