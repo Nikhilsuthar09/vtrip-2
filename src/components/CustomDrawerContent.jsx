@@ -18,7 +18,10 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import DeleteUserModal from "./profile/DeleteUserModal";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { getTitleCase, getuserNameChars } from "../utils/common/processUserData";
+import {
+  getTitleCase,
+  getuserNameChars,
+} from "../utils/common/processUserData";
 
 export default function CustomDrawerContent(props) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,7 +41,7 @@ export default function CustomDrawerContent(props) {
           try {
             await signOut(auth);
             if (user?.providerData[0].providerId === "google.com") {
-              // await GoogleSignin.signOut();
+              await GoogleSignin.signOut();
             }
           } catch (error) {
             console.error("Logout error:", error);

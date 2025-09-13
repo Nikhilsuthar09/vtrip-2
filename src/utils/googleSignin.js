@@ -10,7 +10,7 @@ import { Alert, ToastAndroid } from "react-native";
 import { addUserToDb } from "./firebaseUserHandlers";
 
 GoogleSignin.configure({
-  webClientId: process.env.WEBCLIENTID,
+  webClientId: process.env.EXPO_PUBLIC_WEBCLIENTID,
   offlineAccess: false,
   forceCodeForRefreshToken: false,
 });
@@ -88,12 +88,12 @@ export const getGoogleCredentialForReauth = async () => {
     const response = await GoogleSignin.signIn();
 
     if (!isSuccessResponse(response)) {
-      throw new Error("Google sign in failed");
+      throw new Error("Sign in failed", "Please try again");
     }
 
     const idToken = response.data.idToken;
     return GoogleAuthProvider.credential(idToken);
   } catch (error) {
-    showErrorAlert(error);
+    throw error;
   }
 };

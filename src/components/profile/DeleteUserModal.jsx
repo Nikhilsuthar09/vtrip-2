@@ -25,12 +25,9 @@ import { deleteUserDataInDb } from "../../utils/removeUserAccount";
 import { handleFirebaseAuthErrors } from "../../utils/AuthHandlers";
 import SeparationLine from "../SeparationLine";
 import { Image } from "expo-image";
-import {
-  getGoogleCredentialForReauth,
-  signInGoogle,
-} from "../../utils/googleSignin";
-import AirplaneLoading from "../AirplaneLoading";
+import { getGoogleCredentialForReauth } from "../../utils/googleSignin";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import GoogleLoader from "../GoogleLoader";
 
 const DeleteUserModal = ({ visible, onClose }) => {
   const { user, uid } = useAuth();
@@ -41,7 +38,7 @@ const DeleteUserModal = ({ visible, onClose }) => {
   const [googleButtonLoading, setgoogleButtonLoading] = useState(false);
 
   if (googleButtonLoading) {
-    return <AirplaneLoading />;
+    return <GoogleLoader />;
   }
 
   const validateInputs = () => {
@@ -92,7 +89,10 @@ const DeleteUserModal = ({ visible, onClose }) => {
       await GoogleSignin.signOut();
       const googleCredential = await getGoogleCredentialForReauth();
       await reauthenticateWithCredential(user, googleCredential);
-
+      if (!user) {
+        Alert.alert("Sign in failed");
+        return;
+      }
       await deleteUserDataInDb(uid);
       await deleteUser(user);
       // Close modal and clear fields
@@ -100,10 +100,7 @@ const DeleteUserModal = ({ visible, onClose }) => {
       console.log("User account deleted successfully");
     } catch (error) {
       console.error("Delete account error:", error);
-
-      let errorMessage = handleFirebaseAuthErrors(error);
-
-      Alert.alert("Error", errorMessage);
+      Alert.alert("Error", "Something went wrong please try again");
     } finally {
       setgoogleButtonLoading(false);
     }
