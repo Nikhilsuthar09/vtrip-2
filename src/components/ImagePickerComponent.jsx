@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -73,7 +73,11 @@ const ImagePickerComponent = ({
   return (
     <View style={styles.container}>
       {selectedImage ? (
-        <TouchableOpacity activeOpacity={0.8} style={styles.imageContainer} onPress={pickImage}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.imageContainer}
+          onPress={pickImage}
+        >
           <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
           <TouchableOpacity style={styles.removeButton} onPress={removeImage}>
             <AntDesign name="close" size={20} color="white" />
@@ -165,7 +169,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
-
 });
 
 export default ImagePickerComponent;
