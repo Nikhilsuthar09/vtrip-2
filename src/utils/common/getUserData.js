@@ -5,7 +5,7 @@ import { db } from "../../Configs/firebaseConfig";
 
 const createDefaultUserData = (user) => {
   return {
-    name:  user.displayName || "User",
+    name: user.displayName || "User",
     uid: user.uid,
     email: user.email,
     user,
@@ -19,13 +19,13 @@ const processFirestoreUserData = (docSnap, user) => {
   const email = data.email;
   const name = data.name;
   const imageUrl = data?.imgUrl;
-  
-  return { 
-    name, 
-    uid, 
-    email, 
-    user, 
-    imageUrl 
+
+  return {
+    name,
+    uid,
+    email,
+    user,
+    imageUrl,
   };
 };
 
@@ -33,21 +33,21 @@ export const getUserData = async (user) => {
   try {
     const userDocRef = doc(db, "user", user.uid);
     const docSnap = await getDoc(userDocRef);
-    
+
     if (!docSnap.exists()) {
       // Handle new Google sign-in users
-      if (GoogleSignin.hasPreviousSignIn()) {
-        try {
-          await addUserToDb(user);
-          console.log("Created user document for Google sign-in user");
-        } catch (error) {
-          console.error("Failed to create user document:", error);
-        }
-      }
-      
+      // if (GoogleSignin.hasPreviousSignIn()) {
+      //   try {
+      //     await addUserToDb(user);
+      //     console.log("Created user document for Google sign-in user");
+      //   } catch (error) {
+      //     console.error("Failed to create user document:", error);
+      //   }
+      // }
+
       return createDefaultUserData(user);
     }
-    
+
     return processFirestoreUserData(docSnap, user);
   } catch (error) {
     console.error("Error processing user data:", error);
