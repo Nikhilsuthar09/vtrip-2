@@ -1,4 +1,4 @@
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { doc, getDoc } from "firebase/firestore";
 import { addUserToDb } from "../firebaseUserHandlers";
 import { db } from "../../Configs/firebaseConfig";
