@@ -27,7 +27,7 @@ import {
 import { Image } from "expo-image";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-import { signInGoogle } from "../utils/googleSignin";
+// import { signInGoogle } from "../utils/googleSignin";`
 import { useNavigation } from "@react-navigation/native";
 import GoogleLoader from "../components/GoogleLoader";
 
@@ -62,7 +62,7 @@ export default function AuthScreen() {
 
   const handleGoogleSignin = async () => {
     setGoogleLoading(true);
-    await signInGoogle();
+    // await signInGoogle();
     setGoogleLoading(false);
   };
 
