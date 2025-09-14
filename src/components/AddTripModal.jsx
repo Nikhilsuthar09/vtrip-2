@@ -49,7 +49,7 @@ const AddTripModal = ({
     end: "",
   });
   const [loading, setLoading] = useState(false);
-  const {uid} = useAuth()
+  const { uid } = useAuth();
 
   useEffect(() => {
     if (isEditMode && editTripData) {

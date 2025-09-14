@@ -1,16 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Alert,
-  Image,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
+import { Image } from "expo-image";
 
 const ImagePickerComponent = ({
   onImageSelected,
@@ -18,7 +18,6 @@ const ImagePickerComponent = ({
   placeholder = "Add Trip Image",
 }) => {
   const [loading, setLoading] = useState(false);
-
   const pickImage = async () => {
     try {
       setLoading(true);
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     borderRadius: 12,
-    backgroundColor: COLOR.stroke,
+    backgroundColor: "red",
   },
   removeButton: {
     position: "absolute",

@@ -16,6 +16,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import CreateNewCategory from "./CreateNewCategory";
 import { handleAddPackingItem, handleUpdateItem } from "../../utils/firebase_crud/packing/packingCrud";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AddPackingModal = ({
   isVisible,
@@ -171,7 +172,7 @@ const AddPackingModal = ({
       animationType="slide"
       presentationStyle="fullScreen"
     >
-      <View style={styles.modalContainer}>
+      <SafeAreaView style={styles.modalContainer}>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
@@ -291,7 +292,7 @@ const AddPackingModal = ({
           </Text>
           </TouchableOpacity>
         )}
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

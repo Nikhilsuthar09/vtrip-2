@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1000, // High z-index to ensure it's on top
+    zIndex: 10,
   },
   loaderContainer: {
     backgroundColor: "transparent",

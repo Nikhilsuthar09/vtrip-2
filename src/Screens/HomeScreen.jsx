@@ -40,6 +40,7 @@ import {
 const TravelApp = ({ onPress }) => {
   const [isRoomModalVisible, setIsRoomModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null)
   const { unreadDoc, refetch: refetchNotification } = useFetchNotification();
   const { uid, name, imageUrl } = useAuth();
   const { tripsData, refetch } = useUserTripsData(uid);
@@ -84,7 +85,6 @@ const TravelApp = ({ onPress }) => {
 
     return null;
   }, [safeTripData]);
-
 
   const { travellerNames, travellerLoading, travellerError } =
     useTravellerNames(primaryTrip?.id);
@@ -180,7 +180,6 @@ const TravelApp = ({ onPress }) => {
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       <StatusBar style="dark" />
-
       {/*  Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 20,
     elevation: 10,
-    marginTop: 50,
+    marginTop: 80,
   },
   modalHeader: {
     flexDirection: "row",
