@@ -98,12 +98,12 @@ export default function AuthScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Image
-        style={styles.imageRectangle}
-        source={require("../../assets/img/rectangle.png")}
+        style={styles.bgImage2}
+        source={require("../../assets/img/ellipse1.png")}
       />
       <Image
-        style={styles.imageEclipse}
-        source={require("../../assets/img/eclipse.png")}
+        style={styles.bgImage1}
+        source={require("../../assets/img/ellipse2.png")}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -114,8 +114,27 @@ export default function AuthScreen() {
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
         >
-          <View>
-            <Text>Logo</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ width: 50, height: 52 }}
+              source={require("../../assets/icon.png")}
+            />
+            <Text
+              style={{
+                color: COLOR.textPrimary,
+                fontFamily: FONTS.logoBold,
+                fontSize: FONT_SIZE.H1,
+                marginLeft: -10,
+              }}
+            >
+              trip
+            </Text>
           </View>
           <View style={styles.loginContainer}>
             <View style={styles.logintitle}>
@@ -237,22 +256,22 @@ export default function AuthScreen() {
 
 const styles = StyleSheet.create({
   loginContainer: {
-    display: "flex",
+    backgroundColor: "rgba(255, 255, 255, 0.53)",
     alignItems: "center",
     gap: 20,
-    backgroundColor: "#fff",
     borderRadius: 12,
-    padding: 24,
+    padding: 20,
   },
-  imageRectangle: {
+  bgImage1: {
     position: "absolute",
-    height: "40%",
-    width: "100%",
-  },
-  imageEclipse: {
-    position: "absolute",
-    height: "30%",
+    right: 0,
+    height: "70%",
     width: "60%",
+  },
+  bgImage2: {
+    position: "absolute",
+    height: "50%",
+    width: "70%",
   },
   icon_input_container: {
     flexDirection: "row",

@@ -5,6 +5,7 @@ const FONTS = {
   medium: "Inter_500Medium",
   regular: "Inter_400Regular",
   ibmBold: "IBMPlexSans_700Bold",
+  logoBold: "Montserrat_800ExtraBold",
 };
 
 const FONT_SIZE = {

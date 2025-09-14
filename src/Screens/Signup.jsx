@@ -10,7 +10,7 @@ import {
   StyleSheet,
   Keyboard,
 } from "react-native";
-import  { useState } from "react";
+import { useState } from "react";
 import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import {
@@ -100,12 +100,12 @@ export default function Signup() {
   return (
     <View style={{ flex: 1 }}>
       <Image
-        style={styles.imageRectangle}
-        source={require("../../assets/img/rectangle.png")}
+        style={styles.bgImage2}
+        source={require("../../assets/img/ellipse1.png")}
       />
       <Image
-        style={styles.imageEclipse}
-        source={require("../../assets/img/eclipse.png")}
+        style={styles.bgImage1}
+        source={require("../../assets/img/ellipse2.png")}
       />
 
       <KeyboardAvoidingView
@@ -117,9 +117,35 @@ export default function Signup() {
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
         >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              style={{ width: 50, height: 52 }}
+              source={require("../../assets/icon.png")}
+            />
+            <Text
+              style={{
+                color: COLOR.textPrimary,
+                fontFamily: FONTS.logoBold,
+                fontSize: FONT_SIZE.H1,
+                marginLeft: -10,
+              }}
+            >
+              trip
+            </Text>
+          </View>
           <View style={styles.signupContainer}>
             <Pressable onPress={() => navigation.goBack()}>
-              <AntDesign name="arrow-left" size={24} color={COLOR.textPrimary} />
+              <AntDesign
+                name="arrow-left"
+                size={24}
+                color={COLOR.textPrimary}
+              />
             </Pressable>
             <View style={styles.signupTitle}>
               <Text style={styles.signupText}>Sign up </Text>
@@ -204,7 +230,7 @@ export default function Signup() {
                     style={styles.eyeIcon}
                   >
                     <AntDesign
-                      name={showPassword ? "eye" : "eyeo"}
+                      name={showPassword ? "eye" : "eye-invisible"}
                       size={20}
                       color={COLOR.grey}
                     />
@@ -226,24 +252,24 @@ export default function Signup() {
 
 const styles = StyleSheet.create({
   signupContainer: {
-    display: "flex",
     gap: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255, 255, 255, 0.53)",
     borderRadius: 12,
     padding: 24,
   },
   signupTitle: {
     gap: 8,
   },
-  imageRectangle: {
+  bgImage1: {
     position: "absolute",
-    height: "40%",
-    width: "100%",
-  },
-  imageEclipse: {
-    position: "absolute",
-    height: "30%",
+    right: 0,
+    height: "70%",
     width: "60%",
+  },
+  bgImage2: {
+    position: "absolute",
+    height: "50%",
+    width: "70%",
   },
   signupText: {
     fontFamily: FONTS.bold,

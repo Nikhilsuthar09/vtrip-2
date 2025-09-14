@@ -15,7 +15,7 @@ export const useTravellerNames = (tripId) => {
   const [travellerNames, setTravellerNames] = useState([]);
   const [travellerLoading, setLoading] = useState(true);
   const [travellerError, setError] = useState(null);
-  const { email, name, uid, user, isLoading: authLoading } = useAuth();
+  const { email, name, uid, imageUrl, isLoading: authLoading } = useAuth();
 
   const fetchTravellerNames = async () => {
     if (!tripId || authLoading) {
@@ -42,7 +42,7 @@ export const useTravellerNames = (tripId) => {
           uid: uid || "Unknown User",
           name: name || "Unknown User",
           email: email || null,
-          imageUrl: user?.photoURL,
+          imageUrl: imageUrl,
         });
         setTravellerNames(names);
         setLoading(false);
