@@ -162,9 +162,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 50,
     backgroundColor: COLOR.primary,
     alignItems: "center",
     justifyContent: "center",
@@ -172,9 +172,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   avatarImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 50,
+    borderWidth:2,
+    borderColor:COLOR.primary
   },
   profileText: {
     color: "#fff",

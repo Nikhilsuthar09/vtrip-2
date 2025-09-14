@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -18,6 +12,8 @@ const ImagePickerComponent = ({
   placeholder = "Add Trip Image",
 }) => {
   const [loading, setLoading] = useState(false);
+  const [retrigger, setRetrigger] = useState(0);
+
   const pickImage = async () => {
     try {
       setLoading(true);
@@ -47,9 +43,9 @@ const ImagePickerComponent = ({
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const imageUri = result.assets[0].uri;
         onImageSelected(imageUri);
+        setRetrigger((prev) => prev + 1);
       }
     } catch (error) {
-      console.error("Error picking image:", error);
       Alert.alert("Error", "Failed to pick image. Please try again.");
     } finally {
       setLoading(false);
@@ -65,19 +61,26 @@ const ImagePickerComponent = ({
       {
         text: "Remove",
         style: "destructive",
-        onPress: () => onImageSelected(null),
+        onPress: () => {
+          onImageSelected(null);
+          setRetrigger((prev) => prev + 1);
+        },
       },
     ]);
   };
   return (
-    <View style={styles.container}>
+    <View key={retrigger} style={styles.container}>
       {selectedImage ? (
         <TouchableOpacity
           activeOpacity={0.8}
           style={styles.imageContainer}
           onPress={pickImage}
         >
-          <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
+          <Image
+            source={{ uri: selectedImage }}
+            key={`image-${retrigger}`}
+            style={styles.selectedImage}
+          />
           <TouchableOpacity style={styles.removeButton} onPress={removeImage}>
             <AntDesign name="close" size={20} color="white" />
           </TouchableOpacity>
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     borderRadius: 12,
-    backgroundColor: "red",
+    backgroundColor: COLOR.stroke,
   },
   removeButton: {
     position: "absolute",

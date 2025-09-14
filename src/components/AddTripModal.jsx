@@ -74,7 +74,6 @@ const AddTripModal = ({
       end: "",
     });
   };
-
   const resetDates = () => {
     setTripData((prev) => ({
       ...prev,
