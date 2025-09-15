@@ -17,7 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import DeleteUserModal from "./profile/DeleteUserModal";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+// import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import {
   getTitleCase,
   getuserNameChars,
@@ -40,9 +40,9 @@ export default function CustomDrawerContent(props) {
         onPress: async () => {
           try {
             await signOut(auth);
-            if (user?.providerData[0].providerId === "google.com") {
-              await GoogleSignin.signOut();
-            }
+            // if (user?.providerData[0].providerId === "google.com") {
+            //   await GoogleSignin.signOut();
+            // }
           } catch (error) {
             console.error("Logout error:", error);
             Alert.alert("Error", "Failed to logout. Please try again.");
