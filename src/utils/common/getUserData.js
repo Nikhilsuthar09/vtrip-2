@@ -1,4 +1,4 @@
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { doc, getDoc } from "firebase/firestore";
 import { addUserToDb } from "../firebaseUserHandlers";
 import { db } from "../../Configs/firebaseConfig";
@@ -36,14 +36,14 @@ export const getUserData = async (user) => {
 
     if (!docSnap.exists()) {
       // Handle new Google sign-in users
-      // if (GoogleSignin.hasPreviousSignIn()) {
-      //   try {
-      //     await addUserToDb(user);
-      //     console.log("Created user document for Google sign-in user");
-      //   } catch (error) {
-      //     console.error("Failed to create user document:", error);
-      //   }
-      // }
+      if (GoogleSignin.hasPreviousSignIn()) {
+        try {
+          await addUserToDb(user);
+          console.log("Created user document for Google sign-in user");
+        } catch (error) {
+          console.error("Failed to create user document:", error);
+        }
+      }
 
       return createDefaultUserData(user);
     }

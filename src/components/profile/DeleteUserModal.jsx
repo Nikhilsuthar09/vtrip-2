@@ -26,7 +26,7 @@ import { handleFirebaseAuthErrors } from "../../utils/AuthHandlers";
 import SeparationLine from "../SeparationLine";
 import { Image } from "expo-image";
 import { getGoogleCredentialForReauth } from "../../utils/googleSignin";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import GoogleLoader from "../GoogleLoader";
 
 const DeleteUserModal = ({ visible, onClose }) => {
@@ -84,26 +84,26 @@ const DeleteUserModal = ({ visible, onClose }) => {
     }
   };
   const handleGooglePress = async () => {
-    // try {
-    //   setgoogleButtonLoading(true);
-    //   await GoogleSignin.signOut();
-    //   const googleCredential = await getGoogleCredentialForReauth();
-    //   await reauthenticateWithCredential(user, googleCredential);
-    //   if (!user) {
-    //     Alert.alert("Sign in failed");
-    //     return;
-    //   }
-    //   await deleteUserDataInDb(uid);
-    //   await deleteUser(user);
-    //   // Close modal and clear fields
-    //   handleClose();
-    //   console.log("User account deleted successfully");
-    // } catch (error) {
-    //   console.error("Delete account error:", error);
-    //   Alert.alert("Error", "Something went wrong please try again");
-    // } finally {
-    //   setgoogleButtonLoading(false);
-    // }
+    try {
+      setgoogleButtonLoading(true);
+      await GoogleSignin.signOut();
+      const googleCredential = await getGoogleCredentialForReauth();
+      await reauthenticateWithCredential(user, googleCredential);
+      if (!user) {
+        Alert.alert("Sign in failed");
+        return;
+      }
+      await deleteUserDataInDb(uid);
+      await deleteUser(user);
+      // Close modal and clear fields
+      handleClose();
+      console.log("User account deleted successfully");
+    } catch (error) {
+      console.error("Delete account error:", error);
+      Alert.alert("Error", "Something went wrong please try again");
+    } finally {
+      setgoogleButtonLoading(false);
+    }
   };
 
   const handleClose = () => {
