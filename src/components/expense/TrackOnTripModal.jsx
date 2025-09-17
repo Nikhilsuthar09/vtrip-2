@@ -6,10 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { COLOR, FONT_SIZE, FONTS } from "../../constants/Theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useState, useEffect } from "react";
 
 const TrackOnTripModal = ({
   itemIdToUpdate,
@@ -19,8 +21,36 @@ const TrackOnTripModal = ({
   expenseDataOnTrip,
   onSubmit,
   traveller,
-  isLoading
+  isLoading,
 }) => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  // Add keyboard event listeners
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  // Function to dismiss keyboard when tapping outside inputs
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <Modal
       visible={modalVisible}
@@ -28,10 +58,22 @@ const TrackOnTripModal = ({
       transparent
       onRequestClose={onclose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPress={dismissKeyboard}
+      >
+        <View
+          style={[
+            styles.modalContainer,
+            { marginBottom: keyboardHeight > 0 ? keyboardHeight - 1 : 0 },
+          ]}
+        >
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
           >
             <Text style={styles.modalTitle}>
               {itemIdToUpdate ? "Update" : "Add"} Expense
@@ -54,12 +96,14 @@ const TrackOnTripModal = ({
                 handleDataChange("name", selectedTraveller?.name);
                 handleDataChange("uid", uid);
               }}
-
               style={styles.picker}
             >
               <Picker.Item
                 label="Select"
-                style={{ color: COLOR.placeholder, backgroundColor:"#fff" }}
+                style={{
+                  color: COLOR.placeholder,
+                  backgroundColor: "#fff",
+                }}
               />
               {traveller.map((item) => {
                 return (
@@ -67,7 +111,10 @@ const TrackOnTripModal = ({
                     key={item.uid}
                     label={item.name}
                     value={item.uid}
-                    style={{ color: COLOR.textPrimary, backgroundColor:"#fff" }}
+                    style={{
+                      color: COLOR.textPrimary,
+                      backgroundColor: "#fff",
+                    }}
                   />
                 );
               })}
@@ -97,16 +144,20 @@ const TrackOnTripModal = ({
 
           {/* Submit Button */}
           {isLoading ? (
-            <ActivityIndicator size={"large"}/>
+            <ActivityIndicator size={"large"} />
           ) : (
-            <TouchableOpacity activeOpacity={0.8} style={styles.addButton} onPress={onSubmit}>
-            <Text style={styles.addButtonText}>
-            {itemIdToUpdate ? "Update" : "Add"}
-            </Text>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.addButton}
+              onPress={onSubmit}
+            >
+              <Text style={styles.addButtonText}>
+                {itemIdToUpdate ? "Update" : "Add"}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     </Modal>
   );
 };
@@ -126,6 +177,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 10,
+    position: "relative",
   },
   modalTitle: {
     fontSize: FONT_SIZE.H5,

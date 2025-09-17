@@ -8,8 +8,9 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { COLOR, FONT_SIZE, FONTS } from "../../constants/Theme";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -27,6 +28,8 @@ const PlanInAdvanceModal = ({
   const [expenseType, setExpenseType] = useState("");
   const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const scrollViewRef = useRef(null);
 
   const resetAndClose = () => {
     setExpenseType("");
@@ -40,6 +43,26 @@ const PlanInAdvanceModal = ({
       setAmount(String(itemToUpdate.amount));
     }
   }, [itemToUpdate, isVisible]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (e) => {
+        setKeyboardHeight(e.endCoordinates.height);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
 
   const addItem = async () => {
     const newExpense = {
@@ -79,6 +102,11 @@ const PlanInAdvanceModal = ({
     await updateExpense(tripId, itemToUpdate.id, expense, "plannedExpenses");
   };
 
+  // Function to dismiss keyboard when tapping outside inputs
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   return (
     <Modal
       visible={isVisible}
@@ -86,8 +114,17 @@ const PlanInAdvanceModal = ({
       transparent={true}
       onRequestClose={onBackButtonPress}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContainer}>
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPress={dismissKeyboard}
+      >
+        <View
+          style={[
+            styles.modalContainer,
+            { marginBottom: keyboardHeight > 0 ? keyboardHeight - 22 : 0 },
+          ]}
+        >
           <View style={styles.modalContent}>
             {/* Header */}
             <View style={styles.header}>
@@ -100,7 +137,12 @@ const PlanInAdvanceModal = ({
               </TouchableOpacity>
             </View>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              ref={scrollViewRef}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ paddingBottom: 20 }}
+            >
               {/* Expense Type Input */}
               <Text style={styles.label}>Expense Type *</Text>
               <TextInput
@@ -152,7 +194,7 @@ const PlanInAdvanceModal = ({
             </ScrollView>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </Modal>
   );
 };
@@ -168,6 +210,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: "80%",
+    position: "relative",
   },
   modalContent: {
     padding: 24,
