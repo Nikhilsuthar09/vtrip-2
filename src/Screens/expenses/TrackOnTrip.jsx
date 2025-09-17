@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { COLOR, FONT_SIZE, FONTS } from "../../constants/Theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -120,12 +120,7 @@ const TrackOnTrip = ({ route }) => {
       expenseType: expenseDataOnTrip.expenseType.trim(),
       amount: parseFloat(expenseDataOnTrip.amount.trim()),
     };
-    await updateExpense(
-      tripId,
-      itemIdToUpdate,
-      itemToUpdate,
-      (expensePathName = "onTripExpenses")
-    );
+    await updateExpense(tripId, itemIdToUpdate, itemToUpdate, "onTripExpenses");
   };
 
   const handleAddExpense = async () => {
@@ -135,7 +130,7 @@ const TrackOnTrip = ({ route }) => {
       expenseType: expenseDataOnTrip.expenseType.trim(),
       amount: parseFloat(expenseDataOnTrip.amount.trim()),
     };
-    await addExpense(tripId, newExpense, (expensePathName = "onTripExpenses"));
+    await addExpense(tripId, newExpense, "onTripExpenses");
   };
 
   const handleLongPress = (itemId, expense) => {

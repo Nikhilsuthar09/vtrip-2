@@ -46,7 +46,7 @@ const PlanInAdvanceModal = ({
       expenseType: expenseType.trim(),
       amount: parseFloat(amount.trim()),
     };
-    await addExpense(tripId, newExpense, (expensePathName = "plannedExpenses"));
+    await addExpense(tripId, newExpense, "plannedExpenses");
   };
   const handleSubmitExpense = async () => {
     if (!expenseType.trim()) {
@@ -61,13 +61,13 @@ const PlanInAdvanceModal = ({
       Alert.alert("Error", "Please enter a valid amount");
       return;
     }
-    setIsLoading(true)
+    setIsLoading(true);
     if (itemToUpdate) {
       await updateItem();
     } else {
       await addItem();
     }
-    setIsLoading(false)
+    setIsLoading(false);
     resetAndClose();
   };
   const updateItem = async () => {
@@ -76,12 +76,7 @@ const PlanInAdvanceModal = ({
       expenseType: expenseType.trim(),
       amount: parseFloat(amount.trim()),
     };
-    await updateExpense(
-      tripId,
-      itemToUpdate.id,
-      expense,
-      (expensePathName = "plannedExpenses")
-    );
+    await updateExpense(tripId, itemToUpdate.id, expense, "plannedExpenses");
   };
 
   return (
@@ -130,21 +125,20 @@ const PlanInAdvanceModal = ({
 
               {/* Add Button */}
               {isLoading ? (
-                <ActivityIndicator size={"large"}/>
+                <ActivityIndicator size={"large"} />
               ) : (
-
                 <TouchableOpacity
-                style={[
-                  styles.addButton,
-                  (!expenseType.trim() || !amount.trim()) &&
-                    styles.addButtonDisabled,
-                ]}
-                onPress={handleSubmitExpense}
-                disabled={!expenseType.trim() || !amount.trim()}
+                  style={[
+                    styles.addButton,
+                    (!expenseType.trim() || !amount.trim()) &&
+                      styles.addButtonDisabled,
+                  ]}
+                  onPress={handleSubmitExpense}
+                  disabled={!expenseType.trim() || !amount.trim()}
                 >
-                <Text style={styles.addButtonText}>
-                {itemToUpdate ? "Update" : "Add Expense"}
-                </Text>
+                  <Text style={styles.addButtonText}>
+                    {itemToUpdate ? "Update" : "Add Expense"}
+                  </Text>
                 </TouchableOpacity>
               )}
 

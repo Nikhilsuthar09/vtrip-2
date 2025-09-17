@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
 import { Picker } from "@react-native-picker/picker";
 import { COLOR, FONT_SIZE, FONTS } from "../../constants/Theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
