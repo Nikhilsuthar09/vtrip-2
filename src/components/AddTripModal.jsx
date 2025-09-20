@@ -97,8 +97,35 @@ const AddTripModal = ({
   const handleStoreTripData = async () => {
     try {
       setLoading(true);
-
-      let updatedTripData = { ...tripData };
+      if (!tripData.title.trim()) {
+        Alert.alert("No title", "Please enter a title");
+        return;
+      }
+      if (!tripData.destination.trim()) {
+        Alert.alert("No destination", "Please enter your destination");
+        return;
+      }
+      if (!tripData.budget.trim()) {
+        Alert.alert("Please enter your budget");
+        return;
+      }
+      const budgetNumber = parseInt(tripData.budget);
+      if (isNaN(budgetNumber) || budgetNumber <= 0) {
+        Alert.alert("Invalid budget", "Please enter a valid amount for budget");
+        return;
+      }
+      if (!tripData.start) {
+        Alert.alert("Please select a start date");
+        return;
+      }
+      if (!tripData.end) {
+        Alert.alert("Please select an end date");
+        return;
+      }
+      setTripData((prev) => ({
+        ...prev,
+      }));
+      let updatedTripData = { ...tripData, budget: budgetNumber };
       if (tripData.image) {
         const imageUrl = await uploadImageToCloudinary(tripData.image);
         updatedTripData = {
@@ -132,37 +159,12 @@ const AddTripModal = ({
     }
   };
   const updateTrip = async (tripData) => {
-    if (!tripData.title.trim()) {
-      Alert.alert("Please enter a title");
-      return false;
-    }
-    if (!tripData.destination.trim()) {
-      Alert.alert("Please enter your destination");
-      return false;
-    }
-    if (!tripData.budget.trim()) {
-      Alert.alert("Please enter your budget");
-      return false;
-    }
-    const budgetNumber = parseInt(tripData.budget);
-    if (isNaN(budgetNumber)) {
-      Alert.alert("Please enter a valid amount");
-      return false;
-    }
-    if (!tripData.start) {
-      Alert.alert("Please select a start date");
-      return false;
-    }
-    if (!tripData.end) {
-      Alert.alert("Please select an end date");
-      return false;
-    }
     try {
       const tripId = editTripData.id;
       const tripToUpdate = {
         title: tripData.title.trim(),
         destination: tripData.destination.trim(),
-        budget: budgetNumber,
+        budget: tripData.budget,
         startDate: tripData.start,
         endDate: tripData.end,
         imageUrl: tripData.image,

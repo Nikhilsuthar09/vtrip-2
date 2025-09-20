@@ -6,6 +6,11 @@ import {
   TouchableOpacity,
   Linking,
   ScrollView,
+  Modal,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -14,6 +19,8 @@ import { faqData, guideSteps } from "../constants/helpSupportData";
 
 const HelpSupport = () => {
   const [expanded, setExpanded] = useState(null);
+  const [feedbackModalVisible, setFeedbackModalVisible] = useState(false);
+  const [feedbackText, setFeedbackText] = useState("");
 
   const toggleExpand = (section) => {
     setExpanded(expanded === section ? null : section);
@@ -23,8 +30,33 @@ const HelpSupport = () => {
     Linking.openURL("mailto:support@vtrip.com?subject=Help%20with%20Vtrip");
   };
 
-  const handleFeedbackEmail = () => {
-    Linking.openURL("mailto:support@vtrip.com?subject=Feedback%20for%20Vtrip");
+  const handleFeedbackPress = () => {
+    setFeedbackModalVisible(true);
+  };
+
+  const handleSendFeedback = () => {
+    if (feedbackText.trim() === "") {
+      Alert.alert("Error", "Please enter your feedback before sending.");
+      return;
+    }
+
+    // Create mailto URL with feedback text
+    const subject = "Feedback for Vtrip";
+    const body = feedbackText;
+    const mailtoURL = `mailto:support@vtrip.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    Linking.openURL(mailtoURL);
+    
+    // Close modal and reset
+    setFeedbackModalVisible(false);
+    setFeedbackText("");
+    
+    Alert.alert("Thank you!", "Your feedback has been prepared for sending via email.");
+  };
+
+  const handleCloseFeedbackModal = () => {
+    setFeedbackModalVisible(false);
+    setFeedbackText("");
   };
 
   return (
@@ -45,7 +77,7 @@ const HelpSupport = () => {
         >
           <MaterialCommunityIcons
             name="email-outline"
-            size={24}
+            size={20}
             color={COLOR.primary}
           />
           <Text style={styles.quickActionText}>Contact Us</Text>
@@ -53,9 +85,9 @@ const HelpSupport = () => {
 
         <TouchableOpacity
           style={styles.quickActionBtn}
-          onPress={handleFeedbackEmail}
+          onPress={handleFeedbackPress}
         >
-          <MaterialIcons name="feedback" size={24} color={COLOR.primary} />
+          <MaterialIcons name="feedback" size={20} color={COLOR.primary} />
           <Text style={styles.quickActionText}>Send Feedback</Text>
         </TouchableOpacity>
       </View>
@@ -76,7 +108,7 @@ const HelpSupport = () => {
               />
             </View>
             <View style={{ flexShrink: 1 }}>
-              <Text style={styles.cardTitle}>Frequently Asked Questions</Text>
+              <Text style={styles.cardTitle}>FAQ</Text>
               <Text style={styles.cardSubtitle}>
                 Quick answers to common questions
               </Text>
@@ -152,6 +184,72 @@ const HelpSupport = () => {
           travel planning experience.
         </Text>
       </View>
+
+      {/* Feedback Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={feedbackModalVisible}
+        onRequestClose={handleCloseFeedbackModal}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <View style={styles.modalContent}>
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Send Feedback</Text>
+              <TouchableOpacity
+                onPress={handleCloseFeedbackModal}
+                style={styles.closeButton}
+              >
+                <MaterialCommunityIcons
+                  name="close"
+                  size={24}
+                  color={COLOR.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Modal Body */}
+            <View style={styles.modalBody}>
+              <Text style={styles.modalDescription}>
+                We'd love to hear your thoughts! Share your feedback to help us improve Vtrip.
+              </Text>
+              
+              <TextInput
+                style={styles.textArea}
+                placeholder="Type your feedback here..."
+                placeholderTextColor={COLOR.textSecondary}
+                value={feedbackText}
+                onChangeText={setFeedbackText}
+                multiline={true}
+                numberOfLines={6}
+                textAlignVertical="top"
+              />
+
+              {/* Modal Actions */}
+              <View style={styles.modalActions}>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={handleCloseFeedbackModal}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.sendButton}
+                  onPress={handleSendFeedback}
+                >
+                  <MaterialIcons name="send" size={18} color="#fff" />
+                  <Text style={styles.sendButtonText}>Send</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </ScrollView>
   );
 };
@@ -189,15 +287,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-    padding: 15,
+    padding: 14,
     borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: COLOR.primary + "20",
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
+    borderWidth: 1,
+    borderColor: COLOR.stroke,
   },
   quickActionText: {
     fontSize: FONT_SIZE.body,
@@ -308,39 +401,6 @@ const styles = StyleSheet.create({
     color: COLOR.textSecondary,
     lineHeight: 18,
   },
-  contactInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  contactText: {
-    fontSize: FONT_SIZE.body,
-    fontFamily: FONTS.semiBold,
-    color: COLOR.textPrimary,
-    marginLeft: 10,
-  },
-  contactDescription: {
-    fontSize: FONT_SIZE.body,
-    fontFamily: FONTS.regular,
-    color: COLOR.textSecondary,
-    lineHeight: 20,
-    marginBottom: 15,
-  },
-  emailButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLOR.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  emailButtonText: {
-    fontSize: FONT_SIZE.body,
-    fontFamily: FONTS.semiBold,
-    color: "#fff",
-    marginLeft: 8,
-  },
   footer: {
     padding: 20,
     paddingTop: 10,
@@ -351,6 +411,95 @@ const styles = StyleSheet.create({
     color: COLOR.textSecondary,
     textAlign: "center",
     lineHeight: 18,
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    width: '100%',
+    maxHeight: '80%',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 5 },
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  modalTitle: {
+    fontSize: FONT_SIZE.h3,
+    fontFamily: FONTS.semiBold,
+    color: COLOR.textPrimary,
+  },
+  closeButton: {
+    padding: 5,
+  },
+  modalBody: {
+    padding: 20,
+  },
+  modalDescription: {
+    fontSize: FONT_SIZE.body,
+    fontFamily: FONTS.regular,
+    color: COLOR.textSecondary,
+    lineHeight: 20,
+    marginBottom: 20,
+  },
+  textArea: {
+    borderWidth: 1,
+    borderColor: COLOR.stroke || '#E5E7EB',
+    borderRadius: 12,
+    padding: 15,
+    fontSize: FONT_SIZE.body,
+    fontFamily: FONTS.regular,
+    color: COLOR.textPrimary,
+    height: 120,
+    marginBottom: 20,
+    backgroundColor: '#F9FAFB',
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 12,
+  },
+  cancelButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLOR.stroke || '#E5E7EB',
+  },
+  cancelButtonText: {
+    fontSize: FONT_SIZE.body,
+    fontFamily: FONTS.semiBold,
+    color: COLOR.textSecondary,
+  },
+  sendButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLOR.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  sendButtonText: {
+    fontSize: FONT_SIZE.body,
+    fontFamily: FONTS.semiBold,
+    color: '#fff',
+    marginLeft: 6,
   },
 });
 
