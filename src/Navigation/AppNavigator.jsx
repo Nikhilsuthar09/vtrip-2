@@ -21,6 +21,7 @@ import TravellersScreen from "../Screens/TravellersScreen";
 import { useState } from "react";
 import TopTabMenuModal from "../components/TopTabMenuModal";
 import { useNavigation } from "@react-navigation/native";
+import HelpSupport from "../Screens/HelpSupport";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -197,6 +198,22 @@ export function MainStackNavigator() {
           component={Profile}
           options={{
             title: "Profile",
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: FONTS.semiBold,
+              fontSize: FONT_SIZE.H6,
+            },
+            headerTitleAlign: "center",
+            headerStyle: {
+              backgroundColor: COLOR.primary,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="support"
+          component={HelpSupport}
+          options={{
+            title: "Help & Support",
             headerTintColor: "#fff",
             headerTitleStyle: {
               fontFamily: FONTS.semiBold,

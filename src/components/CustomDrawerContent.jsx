@@ -111,7 +111,15 @@ export default function CustomDrawerContent(props) {
             <Text style={styles.drawerItemText}>Profile</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerItem}>
+          <TouchableOpacity
+            style={styles.drawerItem}
+            onPress={() =>
+              navigation.navigate("MainDrawer", {
+                screen: "MainApp",
+                params: { screen: "support" },
+              })
+            }
+          >
             <Ionicons
               name="help-circle-outline"
               size={20}
@@ -175,8 +183,8 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 50,
-    borderWidth:2,
-    borderColor:COLOR.primary
+    borderWidth: 2,
+    borderColor: COLOR.primary,
   },
   profileText: {
     color: "#fff",
