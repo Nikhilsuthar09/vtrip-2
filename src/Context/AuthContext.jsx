@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
   const updateUserState = async (firebaseUser, isMounted) => {
     if (!isMounted) return;
 

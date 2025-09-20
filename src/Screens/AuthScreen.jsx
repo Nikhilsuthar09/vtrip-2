@@ -50,13 +50,13 @@ export default function AuthScreen() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setIsLoading(false);
       // Signed in
     } catch (error) {
       const errorMessage = handleFirebaseAuthErrors(error);
       console.log(errorMessage);
-      setIsLoading(false);
       Alert.alert("Error ", errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 

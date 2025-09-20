@@ -8,6 +8,7 @@ import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth } from "../Configs/firebaseConfig";
 import { Alert, ToastAndroid } from "react-native";
 import { addUserToDb } from "./firebaseUserHandlers";
+import { getTitleCase } from "./common/processUserData";
 
 GoogleSignin.configure({
   webClientId: process.env.EXPO_PUBLIC_WEBCLIENTID,
@@ -43,7 +44,10 @@ const showErrorAlert = (error) => {
 const handleNewUser = async (user) => {
   try {
     await addUserToDb(user);
-    ToastAndroid.show(`Welcome ${user.name}!`, ToastAndroid.SHORT);
+    ToastAndroid.show(
+      `Welcome ${getTitleCase(user.name)}!`,
+      ToastAndroid.SHORT
+    );
   } catch (error) {
     console.error("Error adding new user to database:", error);
     Alert.alert(
@@ -54,7 +58,10 @@ const handleNewUser = async (user) => {
 };
 
 const handleExistingUser = (userName) => {
-  ToastAndroid.show(`Welcome Back ${userName}`, ToastAndroid.SHORT);
+  ToastAndroid.show(
+    `Welcome back ${getTitleCase(userName)}`,
+    ToastAndroid.SHORT
+  );
 };
 
 export const signInGoogle = async () => {
