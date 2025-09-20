@@ -11,47 +11,64 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { faqData, guideSteps } from "../constants/helpSupportData";
+import { useAuth } from "../Context/AuthContext";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../Configs/firebaseConfig";
 
 const HelpSupport = () => {
   const [expanded, setExpanded] = useState(null);
   const [feedbackModalVisible, setFeedbackModalVisible] = useState(false);
   const [feedbackText, setFeedbackText] = useState("");
+  const [loading, setloading] = useState(false);
+  const { uid } = useAuth();
 
   const toggleExpand = (section) => {
     setExpanded(expanded === section ? null : section);
   };
 
   const handleEmailSupport = () => {
-    Linking.openURL("mailto:support@vtrip.com?subject=Help%20with%20Vtrip");
+    Linking.openURL(
+      "mailto:getvtriphelp@gmail.com?subject=Help%20with%20Vtrip"
+    );
   };
 
   const handleFeedbackPress = () => {
     setFeedbackModalVisible(true);
   };
 
-  const handleSendFeedback = () => {
-    if (feedbackText.trim() === "") {
+  const handleSendFeedback = async () => {
+    if (!feedbackText.trim()) {
       Alert.alert("Error", "Please enter your feedback before sending.");
       return;
     }
 
-    // Create mailto URL with feedback text
-    const subject = "Feedback for Vtrip";
-    const body = feedbackText;
-    const mailtoURL = `mailto:support@vtrip.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    Linking.openURL(mailtoURL);
-    
+    // add feedback
+    setloading(true);
+    try {
+      const docRef = collection(db, "feedback");
+      const docitems = {
+        uid,
+        feedback: feedbackText.trim(),
+        createdAt: serverTimestamp(),
+      };
+      await addDoc(docRef, docitems);
+      Alert.alert("Thank you for your feedback!");
+    } catch (e) {
+      console.log(e);
+      Alert.alert("Error", "Something went wrong, Please try again later");
+    } finally {
+      setloading(false);
+    }
+
     // Close modal and reset
     setFeedbackModalVisible(false);
     setFeedbackText("");
-    
-    Alert.alert("Thank you!", "Your feedback has been prepared for sending via email.");
   };
 
   const handleCloseFeedbackModal = () => {
@@ -215,9 +232,10 @@ const HelpSupport = () => {
             {/* Modal Body */}
             <View style={styles.modalBody}>
               <Text style={styles.modalDescription}>
-                We'd love to hear your thoughts! Share your feedback to help us improve Vtrip.
+                We'd love to hear your thoughts! Share your feedback to help us
+                improve Vtrip.
               </Text>
-              
+
               <TextInput
                 style={styles.textArea}
                 placeholder="Type your feedback here..."
@@ -238,13 +256,17 @@ const HelpSupport = () => {
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.sendButton}
-                  onPress={handleSendFeedback}
-                >
-                  <MaterialIcons name="send" size={18} color="#fff" />
-                  <Text style={styles.sendButtonText}>Send</Text>
-                </TouchableOpacity>
+                {loading ? (
+                  <ActivityIndicator size={"large"} color={COLOR.primary} />
+                ) : (
+                  <TouchableOpacity
+                    style={styles.sendButton}
+                    onPress={handleSendFeedback}
+                  >
+                    <MaterialIcons name="send" size={18} color="#fff" />
+                    <Text style={styles.sendButtonText}>Send</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
@@ -415,30 +437,30 @@ const styles = StyleSheet.create({
   // Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 16,
-    width: '100%',
-    maxHeight: '80%',
+    width: "100%",
+    maxHeight: "80%",
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 5 },
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: "#F3F4F6",
   },
   modalTitle: {
     fontSize: FONT_SIZE.h3,
@@ -460,7 +482,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     borderWidth: 1,
-    borderColor: COLOR.stroke || '#E5E7EB',
+    borderColor: COLOR.stroke || "#E5E7EB",
     borderRadius: 12,
     padding: 15,
     fontSize: FONT_SIZE.body,
@@ -468,11 +490,11 @@ const styles = StyleSheet.create({
     color: COLOR.textPrimary,
     height: 120,
     marginBottom: 20,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: "#F9FAFB",
   },
   modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     gap: 12,
   },
   cancelButton: {
@@ -480,7 +502,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: COLOR.stroke || '#E5E7EB',
+    borderColor: COLOR.stroke || "#E5E7EB",
   },
   cancelButtonText: {
     fontSize: FONT_SIZE.body,
@@ -488,8 +510,8 @@ const styles = StyleSheet.create({
     color: COLOR.textSecondary,
   },
   sendButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: COLOR.primary,
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -498,7 +520,7 @@ const styles = StyleSheet.create({
   sendButtonText: {
     fontSize: FONT_SIZE.body,
     fontFamily: FONTS.semiBold,
-    color: '#fff',
+    color: "#fff",
     marginLeft: 6,
   },
 });
