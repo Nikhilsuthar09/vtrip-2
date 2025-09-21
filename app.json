@@ -23,7 +23,10 @@
       "edgeToEdgeEnabled": true,
       "googleServicesFile": "./google-services.json",
       "package": "com.nikhil09.vtrip",
-      "blockedPermissions": ["android.permission.CAMERA"],
+      "blockedPermissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
       "versionCode": 4
     },
     "web": {
