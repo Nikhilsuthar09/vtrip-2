@@ -22,7 +22,9 @@
       },
       "edgeToEdgeEnabled": true,
       "googleServicesFile": "./google-services.json",
-      "package": "com.nikhil09.vtrip"
+      "package": "com.nikhil09.vtrip",
+      "permissions": ["READ_EXTERNAL_STORAGE"],
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"
