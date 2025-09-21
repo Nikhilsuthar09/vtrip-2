@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import {
+  requestMediaLibraryPermissionsAsync,
+  launchImageLibraryAsync,
+} from "expo-image-picker";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
@@ -19,8 +22,7 @@ const ImagePickerComponent = ({
       setLoading(true);
 
       // Request permission to access media library
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult = await requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
         Alert.alert(
@@ -32,7 +34,7 @@ const ImagePickerComponent = ({
       }
 
       // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
+      const result = await launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsEditing: true,
         aspect: [3, 2],

@@ -15,7 +15,10 @@ import { COLOR, FONT_SIZE, FONTS } from "../constants/Theme";
 import { StatusBar } from "expo-status-bar";
 import { useAuth } from "../Context/AuthContext";
 import { profileUpdateValidation } from "../utils/AuthHandlers";
-import * as ImagePicker from "expo-image-picker";
+import {
+  requestMediaLibraryPermissionsAsync,
+  launchImageLibraryAsync,
+} from "expo-image-picker";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../Configs/firebaseConfig";
 import ChangePasswordModal from "../components/profile/ChangePasswordModal";
@@ -37,8 +40,7 @@ const Profile = () => {
       setImgLoading(true);
 
       // Request permission to access media library
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult = await requestMediaLibraryPermissionsAsync();
 
       if (permissionResult.granted === false) {
         Alert.alert(
@@ -50,7 +52,7 @@ const Profile = () => {
       }
 
       // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
+      const result = await launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsEditing: true,
         aspect: [1, 1],
