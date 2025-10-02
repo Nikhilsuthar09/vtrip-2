@@ -42,7 +42,7 @@ const PlanAdventureModal = ({ visible, onClose }) => {
   const handleJoinTrip = async () => {
     if (
       !roomId.trim() ||
-      roomId.length !== 5 ||
+      roomId.length !== 6 ||
       !/^[a-zA-Z0-9]+$/.test(roomId)
     ) {
       Alert.alert("Wrong code", "Please enter a valid code");

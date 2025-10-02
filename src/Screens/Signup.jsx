@@ -136,7 +136,7 @@ export default function Signup() {
                 marginLeft: -10,
               }}
             >
-              trip
+              Trip
             </Text>
           </View>
           <View style={styles.signupContainer}>

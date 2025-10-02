@@ -133,7 +133,7 @@ export default function AuthScreen() {
                 marginLeft: -10,
               }}
             >
-              trip
+              Trip
             </Text>
           </View>
           <View style={styles.loginContainer}>
