@@ -306,7 +306,6 @@ const Expenses = ({ route }) => {
             height={220}
             chartConfig={chartConfig}
             style={styles.barChart}
-            yAxisLabel={yAxisLabel}
             yAxisSuffix={suffix}
             fromZero={true}
             showValuesOnTopOfBars={true}
