@@ -133,6 +133,14 @@ const MyTrip = () => {
   // to do
   const handleDeleteTrip = async (tripId) => {
     const travellerArray = modalData.selectedItemData.travellers;
+    const tripData = safeTripData.find((item) => item.id === tripId);
+    if (tripData?.createdBy != uid) {
+      Alert.alert(
+        "Invalid Action",
+        "Only trip organiser can perform this action"
+      );
+      return;
+    }
     const result = await deleteTrip(tripId, travellerArray);
 
     if (result.success) {
